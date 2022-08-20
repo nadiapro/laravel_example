@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SeedController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -19,4 +18,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('/user',UserController::class);
-Route::get('/seed',[SeedController::class,'seed']);
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
