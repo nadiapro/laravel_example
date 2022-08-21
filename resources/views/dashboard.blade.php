@@ -14,4 +14,10 @@
             </div>
         </div>
     </div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <p><a href="{{route('user.edit',['user'=>auth()->id()])}}">ویرایش پروفایل</a></p>
+    </div>
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <p><a href="{{route('user.show',['user'=>auth()->id()])}}">نمایش پروفایل</a></p>
+    </div>
 </x-app-layout>
