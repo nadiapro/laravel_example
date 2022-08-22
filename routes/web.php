@@ -20,7 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('/user',UserController::class);
-Route::get('/profile/{user}',[ProfileController::class,'profile'])->name('user.profile');
 Route::get('/seed',[SeedController::class,'seed']);
 Route::get('/dashboard', function () {
     return view('dashboard');

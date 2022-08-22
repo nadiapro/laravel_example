@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Province;
 use App\Models\Education;
 use App\Models\University;
+use App\Models\Role;
 use Illuminate\Routing\Controller;
 
 class SeedController extends Controller
@@ -20,22 +21,23 @@ class SeedController extends Controller
             'name' => 'تهران',
                                     ]);
         $user = User::query()->create([
-            'first_name' => 'علیرضا',
-            'last_name' => 'احمدی',
-            'email' => 'blackhat1520@gmail.com',
-            'mobile' => '09120150989',
+            'first_name' => 'نادیا',
+            'last_name' => 'عبدالوند',
+            'email' => 'abdolvandnadia@gmail.com',
+            'mobile' => '09124171912',
+            'password'=> '12345678',
                                     ]);
         $profile = Profile::query()->create([
             'user_id' => $user->id,
-            'gender' => 1,
+            'gender' => 2,
             'marital_status' => 1,
-            'birthday' => '2022-07-04',
-            'about_me' => 'من یک برنامه نویس پی اچ پی شیطون هستم.',
-            'minimum_salary' => '5',
+            'birthday' => '2020-07-04',
+            'about_me' => '  برنامه نویس مهربون که از چیزای کوچیک لذت میبره   .',
+            'minimum_salary' => '10',
             'show_profile' => 1,
             'province_id' => $province->id,
-            'address' => 'تهران / کارخانه نوآوری',
-            'phone_number' => '09120150989',
+            'address' => 'تهران /شهرک آزادی ',
+            'phone_number' => '09124171912',
                                             ]);
         $university1 = University::query()->create([
             'title' => 'شریف',
@@ -64,12 +66,19 @@ class SeedController extends Controller
                                                 ]);
         $project = Project::query()->create([
             'user_id' => $user->id,
-            'title' => 'وبسایت فرامحتوا',
+            'title' => 'وبسایت شخصی',
             'discribtion' => 'وبسایتی جهت ارائه خدمات مربوط به سئو و تولید محتوا',
             'start_at' => '1399-02-04',
             'end_at' => '1401-02-04',
                                             ]);
+        $role1=Role::create([
+            'title'=>'admin',
+        ]);
+        $role2=Role::create([
+            'title'=>'user',
+        ]);
     User::find($user->id)->skills()->attach(Skill::find($skill1->id));
     User::find($user->id)->skills()->attach(Skill::find($skill3->id));
+    User::find($user->id)->roles()->attach(Role::find($role1->id));
     }
 }

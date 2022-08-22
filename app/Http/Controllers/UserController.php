@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -23,9 +24,15 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('user.index',[
-            'users'=>User::all()
-                                ]);
+        foreach(auth()->user()->roles as $role)
+        {
+                if($role->title == 'admin')
+                {
+                return view('user.index',[
+                    'users'=>User::paginate(1)->withQueryString()
+                                        ]);
+                }
+        }
     }
 
     /**
@@ -35,11 +42,17 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create',[
-            'skills'=>Skill::all(),
-            'provinces'=>Province::all(),
-            'universities'=>University::all(),
-                                ]);
+        foreach(auth()->user()->roles as $role)
+        {
+            if($role->title == 'admin')
+            {
+                return view('user.create',[
+                    'skills'=>Skill::all(),
+                    'provinces'=>Province::all(),
+                    'universities'=>University::all(),
+                                        ]);
+            }
+        }
     }
 
     /**
@@ -79,7 +92,7 @@ class UserController extends Controller
             'phone_number'=>$request->phone,
             'show_prfile'=>$request->show_prfile,
             'province_id'=>$province->id,
-                                    ]);
+            ]);
         foreach($request->skill as $title)
         {
             if(trim($title) != null)
@@ -119,10 +132,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
+        if(auth()->id()==$id)
+        {
         return view('user.show',[
             'user'=>User::find($id),
             'profile'=>User::find($id)->profile,
                                 ]);
+        }
     }
 
     /**
@@ -133,6 +149,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
+        if(auth()->id()==$id)
+        {
         return view('user.edit',[
             'user'=>User::find($id),
             'profile'=>User::find($id)->profile,
@@ -140,6 +158,7 @@ class UserController extends Controller
             'provinces'=>Province::all(),
             'universities'=>University::all(),
                                 ]);
+        }                       
     }
 
     /**
@@ -167,7 +186,8 @@ class UserController extends Controller
                 'name'=>$request->province,
                                         ]);
        
-        $profile=User::find($id)->profile->update([
+        Profile::updateOrCreate([
+            'user_id'=>$id,],[
             'gender'=>$request->gender,
             'marital_status'=>$request->marital,
             'birthday'=>$request->birthday,
@@ -177,7 +197,7 @@ class UserController extends Controller
             'phone_number'=>$request->phone,
             'show_profile'=>$request->show_prfile,
             'province_id'=>$province->id,
-                                                ]);
+                                ]);
         User::find($id)->skills()->detach();
         foreach($request->skill as $title)
         {
@@ -192,20 +212,22 @@ class UserController extends Controller
         $university=University::firstOrCreate([
             'title'=>$request->university,
                                             ]);
-        User::find($id)->education->first()->update([
+        Education::updateOrCreate(
+            ['user_id'=>$id,],[
             'university_id'=>$university->id,
             'grade'=>$request->grade,
             'major'=>$request->major,
             'start_at'=>$request->start_at,
             'end_at'=>$request->end_at,
                                                 ]);
-        User::find($id)->projects->first()->update([
+        Project::updateOrCreate(
+            ['user_id'=>$id,],[
             'title'=>$request->project_title,
             'discribtion'=>$request->project_discribtion,
             'start_at'=>$request->start_at_project,
             'end_at'=>$request->end_at_project,
                                                 ]);
-       return Redirect::route('user.index');
+       return Redirect::route('dashboard');
     }
 
     /**
@@ -216,7 +238,13 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        User::find($id)->delete();
-        return Redirect::route('user.index');
+        foreach(auth()->user()->roles as $role)
+        {
+            if($role->title == 'admin')
+            {
+                User::find($id)->delete();
+                return Redirect::route('user.index');
+            }
+        }
     }
 }

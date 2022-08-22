@@ -8,6 +8,9 @@
     <style> body{ direction: rtl; } </style>
 </head>
 <body>
+<x-app-layout>
+    <x-slot name="header">
+    </x-slot> 
     <h3>اطلاعات پایه</h3>
         <p>نام و نام خانوادگی : {{$user->first_name}} {{$user->last_name}}</p>
         <p>ایمیل : {{$user->email}}</p>
@@ -50,9 +53,10 @@
             </ul>
         @endforeach
     <hr/>
-    <h3>سایر اطلاعات</h3>
-    @isset($profile->minimum_salary)<p>حداقل حقوق درخواستی:{{$profile->minimum_salary}}</p>@endisset
-    @isset($profile->show_profile) <p>آیا مایلید پروفایل شما به کارفرما نمایش داده شود؟
+        <h3>سایر اطلاعات</h3>
+        @isset($profile->minimum_salary)<p>حداقل حقوق درخواستی:{{$profile->minimum_salary}}</p>@endisset
+        @isset($profile->show_profile) <p>آیا مایلید پروفایل شما به کارفرما نمایش داده شود؟
         @if($profile->show_profile==1)بله @elseif($profile->show_profile==2) خیر @endif </p>@endisset
+    </x-app-layout>  
 </body>
 </html>

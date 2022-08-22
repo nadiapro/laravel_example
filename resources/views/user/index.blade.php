@@ -23,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        @php $i=0 @endphp
+        @php $i=1 @endphp
         @foreach($users as $user)
         <tr>
             <td> {{$i++}} </td>
@@ -41,6 +41,6 @@
         @endforeach
     </tbody>
     </table>
-
+    {{ $users->links() }}
 </body>
 </html>

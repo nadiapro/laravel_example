@@ -6,6 +6,7 @@ use App\Models\Skill;
 use App\Models\Profile;
 use App\Models\Project;
 use App\Models\Education;
+use App\Models\Role;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -64,5 +65,9 @@ class User extends Authenticatable
     public function projects()
     {
         return $this->hasMany(Project::class);
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
     }
 }

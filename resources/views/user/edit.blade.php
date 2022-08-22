@@ -8,6 +8,9 @@
     <style> body{ direction: rtl; } </style>
 </head>
 <body>
+<x-app-layout>
+    <x-slot name="header">
+    </x-slot> 
    <form method="post" action="{{route('user.update',['user'=>$user->id])}}">
     @csrf
     @method('put')
@@ -104,5 +107,6 @@
         @endforeach
     <button type="submit"> ذخیره ویرایش</button>
    </form>
+   </x-app-layout>  
 </body>
 </html>
